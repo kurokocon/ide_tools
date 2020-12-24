@@ -1,6 +1,7 @@
 WORKSPACE=$1
 BUILD=$2
 
+set -x
 set -e
 
 echo "WORKSPACE:" $WORKSPACE
@@ -48,3 +49,4 @@ echo "$workspace" >> $WORKSPACE
 echo "$build" >> $BUILD
 
 bazelisk build --keep_going -- $targets
+bazelisk build //${dirname $BUILD}:comp_db
