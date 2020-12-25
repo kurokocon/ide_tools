@@ -10,12 +10,14 @@ cat "$WORKSPACE" > /dev/null
 cat "$BUILD" > /dev/null
 
 workspace=$(cat << End
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
     name = "com_grail_bazel_compdb",
     strip_prefix = "bazel-compilation-database-master",
     urls = ["https://github.com/grailbio/bazel-compilation-database/archive/master.tar.gz"],
 )
+
 End
 )
 
@@ -33,6 +35,7 @@ do
 done
 
 build=$(cat << End
+
 load("@com_grail_bazel_compdb//:aspects.bzl", "compilation_database")
 
 compilation_database(
@@ -41,6 +44,7 @@ compilation_database(
         $compl_targets
     ],
 )
+
 End
 )
 echo "$build"
@@ -50,4 +54,9 @@ echo "$workspace" >> $WORKSPACE
 echo "$build" >> $BUILD
 
 bazel build --keep_going -- $build_targets
-bazel build "//$(dirname $BUILD):comp_db"
+
+build_dir=$(dirname $BUILD)
+if [ "$build_dir" == "." ]; then
+    build_dir=""
+fi
+bazel build "//$build_dir:comp_db"
