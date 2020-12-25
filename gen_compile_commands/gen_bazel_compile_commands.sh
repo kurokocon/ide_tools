@@ -10,6 +10,7 @@ cat "$WORKSPACE" > /dev/null
 cat "$BUILD" > /dev/null
 
 workspace=$(cat << End
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
     name = "com_grail_bazel_compdb",
     strip_prefix = "bazel-compilation-database-master",
@@ -48,5 +49,5 @@ echo "$build_targets"
 echo "$workspace" >> $WORKSPACE
 echo "$build" >> $BUILD
 
-bazelisk build --keep_going -- $build_targets
-bazelisk build "//$(dirname $BUILD):comp_db"
+bazel build --keep_going -- $build_targets
+bazel build "//$(dirname $BUILD):comp_db"
