@@ -43,6 +43,7 @@ compilation_database(
     targets = [
         $compl_targets
     ],
+    exec_root = "$(bazel info execution_root)"
 )
 
 End
